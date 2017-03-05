@@ -5,6 +5,7 @@
  */
 package rpgbattle;
 import java.util.Scanner;
+import java.util.Random;
 
 /**
  *
@@ -20,7 +21,7 @@ public class RPGBattle {
         Scanner in = new Scanner(System.in);
         boolean GameRun = true;
         int battlesWon = 0;
-        String tempName = "Main";
+        String tempName;
         float health = 100;
         float defend = 15;
         float strength = 15;
@@ -45,12 +46,98 @@ public class RPGBattle {
         
         while(GameRun)
         {
-            int EnemyAction = enemy.Update().getValue();
-            int PlayerAction = MainCharacter.Update().getValue();
+            Character.Actions EnemyAction = enemy.Update();
+            Character.Actions PlayerAction = MainCharacter.Update();
+            
+            //if Enemy is Defending
+            if(EnemyAction == Character.Actions.defend)
+            {
+                float totalDamage;
+                switch(PlayerAction)
+                {
+                    case defend:
+                         System.out.println("Both of you Braced for an attack but you"
+                           + " both did at the same you too look stupid doing it!!");
+                         break;
+                    case Attack:
+                        System.out.println("Enemy Braced for an attack");
+                        totalDamage = MainCharacter.GetStrength()- enemy.GetDefend();
+                        System.out.printf("You Attacked dealing %5.2f ", totalDamage, " Damage!");
+                        enemy.SetHealth(enemy.GetHealth() - totalDamage);
+                        break;
+                    case Magic:
+                        System.out.println("Enemy Braced for an attack");
+                        totalDamage = MainCharacter.GetStrength()- enemy.GetDefend();
+                        System.out.printf("You use a Magic Attack Dealing %5.2f "
+                            , totalDamage, " Damage!");
+                        enemy.SetHealth(enemy.GetHealth() - totalDamage);
+                        break;
+                    case item:
+                        System.out.println("Enemy Braced for an attack");
+                        System.out.println("You used a Potion Healing 30 HP ");
+                        MainCharacter.SetHealth(MainCharacter.GetHealth() + 30);
+                }
+            }
+            else
+            {
+                float totalDamage;
+                
+                switch(PlayerAction)
+                {
+                    case defend:
+                        System.out.println("You Braced for an Attack! ");
+                        
+                        totalDamage = enemy.GetStrength() - MainCharacter.GetDefend();
+                        System.out.printf(enemy.GetName() + " attacked you with "
+                                + "%5.2f ", totalDamage, " Damage!" );
+                        MainCharacter.SetHealth(MainCharacter.GetHealth() - totalDamage);
+                        break;
+                    case Attack:
+                        totalDamage = MainCharacter.GetStrength();
+                        System.out.printf("You Attacked dealing %5.2f ", totalDamage, " Damage!");
+                        enemy.SetHealth(enemy.GetHealth() - totalDamage);
+                        
+                        totalDamage = enemy.GetStrength();
+                        System.out.printf(enemy.GetName() + " attacked you with "
+                                + "%5.2f ", totalDamage, " Damage!" );
+                        MainCharacter.SetHealth(MainCharacter.GetHealth() - totalDamage);
+                        break;
+                    case Magic:
+                        
+                        totalDamage = MainCharacter.GetStrength() + MainCharacter.GetMagicStrength();
+                        System.out.printf("You use a Magic Attack Dealing %5.2f ", totalDamage, " Damage!");
+                        enemy.SetHealth(enemy.GetHealth() - totalDamage);
+                        
+                        totalDamage = enemy.GetStrength();
+                        System.out.printf(enemy.GetName() + " attacked you with "
+                                + "%5.2f ", totalDamage, " Damage!" );
+                        MainCharacter.SetHealth(MainCharacter.GetHealth() - totalDamage);
+                        break;
+                    case item:
+                        System.out.println("You used a Potion Healing 30 HP ");
+                        MainCharacter.SetHealth(MainCharacter.GetHealth() + 30);
+                        totalDamage = enemy.GetStrength();
+                        System.out.printf(enemy.GetName() + " attacked you with "
+                                + "%5.2f ", totalDamage, " Damage!" );
+                        MainCharacter.SetHealth(MainCharacter.GetHealth() - totalDamage);
+                        break;
+                }
+            }
             
             if(MainCharacter.GetHealth() <= 0)
             {
                 GameRun = false;
+            }
+            else if(MainCharacter.GetHealth() >= 0 && GameRun == true && enemy.GetHealth() <= 0)
+            {
+                battlesWon++;
+                System.out.println("You Won the battle you got a potion! Next Battle will commense");
+                try {Thread.sleep(1000);}
+                catch (InterruptedException e){e.printStackTrace();}
+                Random rand = new Random();
+                int n = rand.nextInt(5);
+                enemy = new Enemy(enemyNames[n], health - 50, defend - 7, 
+                strength);
             }
         }
     }

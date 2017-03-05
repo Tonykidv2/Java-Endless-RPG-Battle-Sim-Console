@@ -20,6 +20,7 @@ public abstract class Character
     private int id = 1;
     private Actions(int id) { this.id = id; }
     public int getValue() { return id; }
+    public Actions returnEnmu() {return this;}
   }
   
   Character()

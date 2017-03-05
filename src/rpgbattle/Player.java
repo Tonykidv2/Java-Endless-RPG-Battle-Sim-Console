@@ -38,8 +38,8 @@ public class Player extends Character
   {
       Scanner in = new Scanner(System.in);
       System.out.println("Your Name: " + GetName());
-      System.out.printf("Your HP: %5.2" + GetHealth());
-      System.out.printf("Your MP: %5.2" + GetMana());
+      System.out.printf("Your HP: %5.2f", GetHealth());
+      System.out.printf("Your MP: %5.2f", GetMana());
       System.out.println();
       System.out.println("What will you do: ");
       System.out.println("1: Attack");
@@ -67,7 +67,10 @@ public class Player extends Character
                   return Actions.defend;
               case 4 :
                   if(GetPotionCount() > 0)
+                  {   
+                      numPotions--;
                       return Actions.item;
+                  }
                   else
                       System.out.println("You have no more Potions!");
                   break;

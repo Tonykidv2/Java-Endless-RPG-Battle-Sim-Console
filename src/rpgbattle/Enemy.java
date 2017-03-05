@@ -23,7 +23,7 @@ public class Enemy extends Character
   Actions Update()
   {
       System.out.println("Current Enemy: " + GetName());
-      System.out.printf("Current Enemy HP: %5.2"+ GetHealth());
+      System.out.printf("Current Enemy HP: %5.2f", GetHealth());
       System.out.println();
       System.out.println();
       System.out.println();
